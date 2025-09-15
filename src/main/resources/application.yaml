@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+  name: demo
+# =======================================
+# CONFIGURAÇÕES DO BANCO DE DADOS (POSTGRESQL)
+# =======================================
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bd_api_zoonosys
+    username: postgres
+    password: senha
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+# =======================================
+# CONFIGURAÇÕES DE SEGURANÇA DA API (JWT)
+# =======================================
+api:
+  security:
+    token:
+      secret-key: ${TOKEN_SECRET_KEY}
+      issuer: ${TOKEN_ISSUER}

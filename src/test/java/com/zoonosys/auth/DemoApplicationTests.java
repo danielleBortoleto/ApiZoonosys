@@ -1,4 +1,4 @@
-package com.zoonosys.demo;
+package com.zoonosys.auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
