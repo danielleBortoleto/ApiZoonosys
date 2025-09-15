@@ -41,26 +41,24 @@ public class SecurityConfig {
             "/users/test/customer"
     };
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-                .cors(cors -> {})
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/").permitAll()
-                        .requestMatchers("/users/register/**").permitAll()
+   @Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> {}) // habilita o CORS usando o bean corsConfigurationSource()
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // libera preflight requests
+                    .requestMatchers("/users/register/**").permitAll()
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
                     .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
                     .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")
                     .anyRequest().authenticated()
-                )
-                .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
-
+            )
+            .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
+}
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws  Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -73,16 +71,19 @@ public class SecurityConfig {
 
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
-        var config = new org.springframework.web.cors.CorsConfiguration();
-        // Em produção, troque "*" por "http://localhost:3000" ou a(s) origem(ns) do seu front
-        config.setAllowedOriginPatterns(java.util.List.of("*"));
-        config.setAllowedMethods(java.util.List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-        config.setAllowedHeaders(java.util.List.of("Authorization","Content-Type","X-Requested-With"));
-        config.setExposedHeaders(java.util.List.of("Authorization"));
-        config.setAllowCredentials(true);
+  
+    var config = new org.springframework.web.cors.CorsConfiguration();
 
-        var source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/", config);
-        return source;
-    }
+    // Em dev: localhost:5173 (vite). Em produção: domínio do frontend
+    config.setAllowedOriginPatterns(java.util.List.of("http://localhost:5173", "https://seusite.com"));
+
+    config.setAllowedMethods(java.util.List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+    config.setAllowedHeaders(java.util.List.of("Authorization","Content-Type","X-Requested-With"));
+    config.setExposedHeaders(java.util.List.of("Authorization"));
+    config.setAllowCredentials(true);
+
+    var source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config); // <-- aqui deve ser /**, não só "/"
+    return source;
+}
 }
