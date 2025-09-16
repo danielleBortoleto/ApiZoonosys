@@ -1,5 +1,7 @@
 package com.zoonosys.auth.security.config;
 
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.zoonosys.auth.security.authentication.UserAuthenticationFilter;
+
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -34,21 +39,23 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_ADMIN = {
-            "/users/test/administrator"
-    };
+           "/users/test/administrator",
+            "/api/admin/**",
+            "/users/admin/**"    };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
-            "/users/test/customer"
+            "/users/test/customer",
+            "/api/customer/**"
     };
 
    @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     return httpSecurity
             .csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> {}) // habilita o CORS usando o bean corsConfigurationSource()
+            .cors(cors -> {}) 
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // libera preflight requests
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() 
                     .requestMatchers("/users/register/**").permitAll()
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
@@ -70,20 +77,55 @@ public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws
     }
 
     @Bean
-    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
-  
-    var config = new org.springframework.web.cors.CorsConfiguration();
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        
+        // Origens permitidas - ajuste conforme seu ambiente
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "http://localhost:*",
+                "https://localhost:*",
+                "http://127.0.0.1:*",
+                "https://seusite.com",
+                "https://*.seusite.com"
+        ));
+        
+        // Métodos HTTP permitidos
+        configuration.setAllowedMethods(Arrays.asList(
+                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"
+        ));
+        
+        // Headers permitidos
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With",
+                "Accept",
+                "Origin",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers"
+        ));
+        
+        // Headers expostos
+        configuration.setExposedHeaders(Arrays.asList(
+                "Authorization",
+                "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Credentials"
+        ));
+        
+        // Permitir credentials (cookies, authorization headers)
+        configuration.setAllowCredentials(true);
+        
+        // Tempo de cache para requisições preflight
+        configuration.setMaxAge(3600L);
 
-    // Em dev: localhost:5173 (vite). Em produção: domínio do frontend
-    config.setAllowedOriginPatterns(java.util.List.of("http://localhost:5173", "https://seusite.com"));
-
-    config.setAllowedMethods(java.util.List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-    config.setAllowedHeaders(java.util.List.of("Authorization","Content-Type","X-Requested-With"));
-    config.setExposedHeaders(java.util.List.of("Authorization"));
-    config.setAllowCredentials(true);
-
-    var source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config); // <-- aqui deve ser /**, não só "/"
-    return source;
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        
+        return source;
+    }
+      @Bean
+    public CorsConfiguration corsConfiguration() {
+        return new CorsConfiguration().applyPermitDefaultValues();
+    }
 }
-}
+
