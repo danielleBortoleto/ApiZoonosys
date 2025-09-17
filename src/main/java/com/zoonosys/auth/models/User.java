@@ -25,6 +25,24 @@ public class User{
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, unique = true)
+    private String cpf;
+
+    @Column(nullable = false)
+    private String telefone;
+
+    @Column
+    private String telefoneSecundario;
+
+    @Column
+    private String emailSecundario;
+
+    @Column
+    private String endereco;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="user_roles",
         joinColumns = @JoinColumn(name = "user_id"),
