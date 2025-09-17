@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/users/register/**").permitAll()
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
@@ -76,12 +76,21 @@ public class SecurityConfig {
         var config = new org.springframework.web.cors.CorsConfiguration();
         config.setAllowedOriginPatterns(java.util.List.of("http://localhost:5173"));
         config.setAllowedMethods(java.util.List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-        config.setAllowedHeaders(java.util.List.of("Authorization","Content-Type","X-Requested-With"));
+        config.setAllowedHeaders(java.util.List.of("Authorization","Content-Type","X-Requested-With","Authorization", 
+            "Accept",
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
+           
+        ));
+
         config.setExposedHeaders(java.util.List.of("Authorization"));
         config.setAllowCredentials(true);
 
         var source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/", config);
+        source.registerCorsConfiguration("/**", config);//config para todas as rotas
         return source;
     }
+
+    
 }
