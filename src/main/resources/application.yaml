@@ -11,8 +11,8 @@ spring:
 # =======================================
   datasource:
     url: jdbc:postgresql://localhost:5432/bd_api_zoonosys
-    username: postgres
-    password: 951413
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:senha}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
