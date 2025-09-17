@@ -1,7 +1,3 @@
-server:
-  port: 8080
-  servlet:
-    context-path: /api
 
 spring:
   application:
@@ -12,7 +8,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/bd_api_zoonosys
     username: postgres
-    password: senha
+    password: 951413
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
