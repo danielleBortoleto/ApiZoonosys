@@ -31,3 +31,12 @@ api:
     token:
       secret-key: ${TOKEN_SECRET_KEY}
       issuer: ${TOKEN_ISSUER}
+
+# =======================================
+# CONFIGURAÇÕES SPRINGDOC (OpenAPI/Swagger)
+# =======================================
+springdoc:
+    api-docs:
+      path: /api-docs
+    swagger-ui:
+      path: /api-docs/index.html
