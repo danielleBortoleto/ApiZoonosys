@@ -34,13 +34,13 @@ public class User{
     @Column(nullable = false)
     private String telefone;
 
-    @Column
+    @Column()
     private String telefoneSecundario;
 
-    @Column
+    @Column()
     private String emailSecundario;
 
-    @Column
+    @Column()
     private String endereco;
 
     @ManyToMany(fetch = FetchType.EAGER)
