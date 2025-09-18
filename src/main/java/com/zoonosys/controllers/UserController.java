@@ -1,9 +1,9 @@
-package com.zoonosys.auth.controllers;
+package com.zoonosys.controllers;
 
-import com.zoonosys.auth.dtos.LoginUserDTO;
-import com.zoonosys.auth.dtos.RecoveryJwtTokenDTO;
-import com.zoonosys.auth.dtos.RegisterUserDTO;
-import com.zoonosys.auth.services.UserService;
+import com.zoonosys.dtos.LoginUserDTO;
+import com.zoonosys.dtos.RecoveryJwtTokenDTO;
+import com.zoonosys.dtos.RegisterUserDTO;
+import com.zoonosys.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

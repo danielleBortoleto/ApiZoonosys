@@ -1,13 +1,12 @@
-package com.zoonosys.auth.services;
+package com.zoonosys.services;
 
-import com.zoonosys.auth.dtos.LoginUserDTO;
-import com.zoonosys.auth.dtos.RecoveryJwtTokenDTO;
-import com.zoonosys.auth.dtos.RegisterUserDTO;
-import com.zoonosys.auth.enums.RoleName;
-import com.zoonosys.auth.models.Role;
-import com.zoonosys.auth.models.User;
-import com.zoonosys.auth.repositories.RoleRepository;
-import com.zoonosys.auth.repositories.UserRepository;
+import com.zoonosys.dtos.LoginUserDTO;
+import com.zoonosys.dtos.RecoveryJwtTokenDTO;
+import com.zoonosys.dtos.RegisterUserDTO;
+import com.zoonosys.models.Role;
+import com.zoonosys.models.User;
+import com.zoonosys.repositories.RoleRepository;
+import com.zoonosys.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,9 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.zoonosys.auth.security.authentication.JwtTokenService;
-import com.zoonosys.auth.security.config.SecurityConfig;
-import com.zoonosys.auth.security.userdetails.UserDetailsImpl;
+import com.zoonosys.security.authentication.JwtTokenService;
+import com.zoonosys.security.userdetails.UserDetailsImpl;
 
 import java.util.List;
 

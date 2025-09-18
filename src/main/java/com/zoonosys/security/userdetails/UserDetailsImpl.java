@@ -1,6 +1,6 @@
-package com.zoonosys.auth.security.userdetails;
+package com.zoonosys.security.userdetails;
 
-import com.zoonosys.auth.models.User;
+import com.zoonosys.models.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
