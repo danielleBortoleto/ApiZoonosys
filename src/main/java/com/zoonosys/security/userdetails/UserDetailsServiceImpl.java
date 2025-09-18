@@ -1,7 +1,7 @@
-package com.zoonosys.auth.security.userdetails;
+package com.zoonosys.security.userdetails;
 
-import com.zoonosys.auth.models.User;
-import com.zoonosys.auth.repositories.UserRepository;
+import com.zoonosys.models.User;
+import com.zoonosys.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

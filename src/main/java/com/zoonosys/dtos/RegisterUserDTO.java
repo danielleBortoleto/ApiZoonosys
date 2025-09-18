@@ -1,6 +1,6 @@
-package com.zoonosys.auth.dtos;
+package com.zoonosys.dtos;
 
-import com.zoonosys.auth.enums.RoleName;
+import com.zoonosys.enums.RoleName;
 
 import java.util.Optional;
 

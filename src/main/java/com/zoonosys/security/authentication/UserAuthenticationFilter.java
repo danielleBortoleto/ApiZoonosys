@@ -1,23 +1,20 @@
-package com.zoonosys.auth.security.authentication;
+package com.zoonosys.security.authentication;
 
-import com.zoonosys.auth.models.User;
-import com.zoonosys.auth.repositories.UserRepository;
+import com.zoonosys.models.User;
+import com.zoonosys.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.hibernate.annotations.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.zoonosys.auth.security.config.SecurityConfig;
-import com.zoonosys.auth.security.userdetails.UserDetailsImpl;
+import com.zoonosys.security.userdetails.UserDetailsImpl;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Component
 public class UserAuthenticationFilter extends OncePerRequestFilter {

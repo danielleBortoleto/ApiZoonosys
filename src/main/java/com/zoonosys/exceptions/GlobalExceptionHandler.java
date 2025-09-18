@@ -1,4 +1,4 @@
-package com.zoonosys.auth.exceptions;
+package com.zoonosys.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

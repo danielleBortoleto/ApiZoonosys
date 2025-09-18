@@ -1,8 +1,8 @@
-package com.zoonosys.auth.repositories;
+package com.zoonosys.repositories;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.zoonosys.auth.models.User;
+import com.zoonosys.models.User;
 import org.springframework.stereotype.Repository;
 
 @Repository

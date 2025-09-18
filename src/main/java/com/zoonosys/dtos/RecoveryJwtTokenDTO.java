@@ -1,4 +1,4 @@
-package com.zoonosys.auth.dtos;
+package com.zoonosys.dtos;
 
 public record RecoveryJwtTokenDTO(
         String token

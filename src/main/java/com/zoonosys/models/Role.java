@@ -1,6 +1,6 @@
-package com.zoonosys.auth.models;
+package com.zoonosys.models;
 
-import com.zoonosys.auth.enums.RoleName;
+import com.zoonosys.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

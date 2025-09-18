@@ -1,8 +1,8 @@
-package com.zoonosys.auth.security.config;
+package com.zoonosys.security.config;
 
-import com.zoonosys.auth.enums.RoleName;
-import com.zoonosys.auth.models.Role;
-import com.zoonosys.auth.repositories.RoleRepository;
+import com.zoonosys.enums.RoleName;
+import com.zoonosys.models.Role;
+import com.zoonosys.repositories.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
