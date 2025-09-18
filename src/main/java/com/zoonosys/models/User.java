@@ -1,4 +1,4 @@
-package com.zoonosys.auth.models;
+package com.zoonosys.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
