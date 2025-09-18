@@ -1,18 +1,19 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
   servlet:
     context-path: /api
 
 spring:
   application:
   name: demo
+
 # =======================================
 # CONFIGURAÇÕES DO BANCO DE DADOS (POSTGRESQL)
 # =======================================
   datasource:
     url: jdbc:postgresql://localhost:5432/bd_api_zoonosys
-    username: postgres
-    password: senha
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:senha}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

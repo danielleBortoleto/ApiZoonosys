@@ -52,7 +52,6 @@ public class UserService {
             throw new IllegalArgumentException("E-mail já cadastrado");
         }
 
-        RoleName roleName = registerUserDTO.role();
         Role role = roleRepository.findByName(registerUserDTO.role());
         if (role == null) {
             // Tratar o caso em que a Role não é encontrada (lançar exceção, por exemplo)
@@ -62,7 +61,13 @@ public class UserService {
         User newUser = User.builder()
                 .email(registerUserDTO.email())
                 .password(passwordEncoder.encode(registerUserDTO.password()))
+                .name(registerUserDTO.name())
+                .cpf(registerUserDTO.cpf())
+                .telefone(registerUserDTO.telefone())
                 .roles(List.of(role))
+                .emailSecundario(registerUserDTO.emailSecundario().orElse(null))
+                .telefoneSecundario(registerUserDTO.telefoneSecundario().orElse(null))
+                .emailSecundario(registerUserDTO.emailSecundario().orElse(null))
                 .build();
 
         userRepository.save(newUser);

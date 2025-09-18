@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -23,6 +26,7 @@ public class UserController {
 
    @PostMapping("/register")
     public ResponseEntity<Void> registerUser(@RequestBody RegisterUserDTO registerUserDTO){
+        System.out.println("Controller");
         userService.registerUser(registerUserDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
