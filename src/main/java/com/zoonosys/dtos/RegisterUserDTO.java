@@ -16,3 +16,4 @@ public record RegisterUserDTO(
         Optional<String> secundaryEmail,
         Optional<String> address
     ){
+}
