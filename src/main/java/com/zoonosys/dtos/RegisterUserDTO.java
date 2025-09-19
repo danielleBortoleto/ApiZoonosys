@@ -10,9 +10,10 @@ public record RegisterUserDTO(
         RoleName role,
         String name,
         String cpf,
-        String telefone,
-        Optional<String> telefoneSecundario,
-        Optional<String> emailSecundario,
-        Optional<String> endereco
+        String phone,
+        String sexo,
+        Optional<String> secundaryPhone,
+        Optional<String> secundaryEmail,
+        Optional<String> adress
     ){
 }
