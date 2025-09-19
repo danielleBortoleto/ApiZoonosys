@@ -34,7 +34,10 @@ To run the project locally, you need to have installed:
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/danielleBortoleto/ApiZoonosys.git
+<<<<<<< HEAD
    cd zoonosys
+=======
+>>>>>>> 705d35e05f38887a880280ee98654042374b2898
 
 ______
 # Zoonosys API
