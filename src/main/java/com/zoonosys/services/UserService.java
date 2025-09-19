@@ -61,11 +61,12 @@ public class UserService {
                 .password(passwordEncoder.encode(registerUserDTO.password()))
                 .name(registerUserDTO.name())
                 .cpf(registerUserDTO.cpf())
-                .telefone(registerUserDTO.telefone())
+                .phone(registerUserDTO.phone())
                 .roles(List.of(role))
-                .emailSecundario(registerUserDTO.emailSecundario().orElse(null))
-                .telefoneSecundario(registerUserDTO.telefoneSecundario().orElse(null))
-                .emailSecundario(registerUserDTO.emailSecundario().orElse(null))
+                .secundaryEmail(registerUserDTO.secundaryEmail().orElse(null))
+                .secundaryPhone(registerUserDTO.secundaryPhone().orElse(null))
+                .sexo(registerUserDTO.sexo().orElse(null))
+                .address(registerUserDTO.address().orElse(null))
                 .build();
 
         userRepository.save(newUser);

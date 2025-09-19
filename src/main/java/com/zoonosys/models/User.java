@@ -32,16 +32,19 @@ public class User{
     private String cpf;
 
     @Column(nullable = false)
-    private String telefone;
+    private String phone;
 
     @Column()
-    private String telefoneSecundario;
+    private String sexo;
 
     @Column()
-    private String emailSecundario;
+    private String secundaryPhone;
 
     @Column()
-    private String endereco;
+    private String secundaryEmail;
+
+    @Column()
+    private String address;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="user_roles",
