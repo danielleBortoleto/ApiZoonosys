@@ -33,7 +33,7 @@ To run the project locally, you need to have installed:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/zoonosys.git
+   git clone https://github.com/danielleBortoleto/ApiZoonosys.git
    cd zoonosys
 
 ______
@@ -72,7 +72,7 @@ Para rodar o projeto localmente, você precisa ter instalado:
 
 1.  **Clone o Repositório:**
     ```bash
-    git clone [https://github.com/seu-usuario/zoonosys.git](https://github.com/seu-usuario/zoonosys.git)
+    git clone [https://github.com/danielleBortoleto/ApiZoonosys.git]
     cd zoonosys
     ```
 
