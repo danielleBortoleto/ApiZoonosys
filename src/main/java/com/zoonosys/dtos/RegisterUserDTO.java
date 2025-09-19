@@ -11,9 +11,9 @@ public record RegisterUserDTO(
         String name,
         String cpf,
         String phone,
-        String sexo,
+        Optional<String> sexo,
         Optional<String> secundaryPhone,
         Optional<String> secundaryEmail,
-        Optional<String> adress
+        Optional<String> address
     ){
 }

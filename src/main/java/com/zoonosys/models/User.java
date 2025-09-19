@@ -34,7 +34,7 @@ public class User{
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = false, unique = true)
+    @Column()
     private String sexo;
 
     @Column()
