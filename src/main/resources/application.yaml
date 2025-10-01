@@ -37,6 +37,7 @@ api:
 # =======================================
 springdoc:
     api-docs:
-      path: /api-docs
+      path: /docs
+      pathToMatch: /api/**
     swagger-ui:
-      path: /api-docs/index.html
+      use-root-path: true

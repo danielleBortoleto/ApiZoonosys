@@ -3,6 +3,7 @@ package com.zoonosys.controllers;
 import com.zoonosys.dtos.LoginUserDTO;
 import com.zoonosys.dtos.RecoveryJwtTokenDTO;
 import com.zoonosys.dtos.RegisterUserDTO;
+import com.zoonosys.dtos.UserResponseDTO;
 import com.zoonosys.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @Tag(name="Users", description = "Endpoints para gerenciamento de usuários.")
@@ -79,5 +81,18 @@ public class UserController {
     @GetMapping("/test/administrator")
     public ResponseEntity<String> getAdministratorAuthenticationTest(){
         return new ResponseEntity<>("Administrator authenticated successfully", HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<UserResponseDTO> users = userService.findAllUsersDTO();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("list/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+        return userService.findUserDTOById(id)
+                .map(userDTO -> new ResponseEntity<>(userDTO, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

@@ -3,6 +3,7 @@ package com.zoonosys.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,15 +25,21 @@ public class SecurityConfig {
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/users/login",
-            "/users/register",
+            "/users/register"
     };  
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/users/test"
     };
 
-    public static final String [] ENDPOINTS_ADMIN = {
-            "/users/test/administrator"
+    public static final String [] ENDPOINTS_ADMIN_POST = {
+            "/news/register"
+    };
+
+    public static final String [] ENDPOINTS_ADMIN_GET = {
+            "/users/test/administrator",
+            "/users/{id}",
+            "/users"
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
@@ -43,15 +50,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                //.cors(AbstractHttpConfigurer::disable)
-   .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/").permitAll()
-                    .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, ENDPOINTS_ADMIN_GET).hasAuthority("ROLE_ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.POST, ENDPOINTS_ADMIN_POST).hasAuthority("ROLE_ADMINISTRATOR")
+                        .requestMatchers(ENDPOINTS_CUSTOMER).hasAuthority("ROLE_CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/news").permitAll()
+                        .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
-                    .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
-                    .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")
                     .anyRequest().authenticated()
                 )
                 .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -68,7 +76,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean //alterado para validar se o server nao bloqueia minha requisição vue
+    @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         var config = new org.springframework.web.cors.CorsConfiguration();
         config.setAllowedOriginPatterns(java.util.List.of("http://localhost:5173"));
@@ -85,7 +93,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
 
         var source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);//config para todas as rotas
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 
