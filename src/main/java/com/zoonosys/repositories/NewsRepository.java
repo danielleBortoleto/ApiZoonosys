@@ -9,10 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long> {
-    Optional<News> findById(Long id);
-
-    List<News> findAll();
-
     List<News> findByUserId(long userId);
 
     List<News> findByTitleContainingIgnoreCase(String title);

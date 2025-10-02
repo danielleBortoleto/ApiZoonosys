@@ -1,5 +1,6 @@
 package com.zoonosys.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,11 +13,14 @@ import java.sql.Timestamp;
 @Builder
 @Entity(name = "News")
 @Table(name = "news")
+@Schema(description = "Entidade de Notícia persistida no banco de dados.")
 public class News {
+    @Schema(description = "ID único da notícia.", example = "10")
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(description = "Título da notícia após a sanitização.", example = "Novo Horário de Atendimento")
     @Column(nullable = false)
     private String title;
 
