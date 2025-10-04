@@ -5,3 +5,4 @@ public record LoginUserDTO(
         String password
 ) {
 }
+        
