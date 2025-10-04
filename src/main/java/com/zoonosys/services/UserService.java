@@ -3,6 +3,7 @@ package com.zoonosys.services;
 import com.zoonosys.dtos.LoginUserDTO;
 import com.zoonosys.dtos.RecoveryJwtTokenDTO;
 import com.zoonosys.dtos.RegisterUserDTO;
+import com.zoonosys.dtos.UserResponseDTO;
 import com.zoonosys.models.Role;
 import com.zoonosys.models.User;
 import com.zoonosys.repositories.RoleRepository;
@@ -18,6 +19,7 @@ import com.zoonosys.security.authentication.JwtTokenService;
 import com.zoonosys.security.userdetails.UserDetailsImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -52,7 +54,6 @@ public class UserService {
 
         Role role = roleRepository.findByName(registerUserDTO.role());
         if (role == null) {
-            // Tratar o caso em que a Role não é encontrada (lançar exceção, por exemplo)
             throw new RuntimeException("Role '" + registerUserDTO.role() + "' not found.");
         }
 
@@ -71,5 +72,17 @@ public class UserService {
 
         userRepository.save(newUser);
     }
+
+    public List<UserResponseDTO> findAllUsersDTO() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserResponseDTO(user.getId(), user.getEmail(), user.getName(), user.getPhone()))
+                .toList();
+    }
+
+    public Optional<UserResponseDTO> findUserDTOById(Long id) {
+        return userRepository.findById(id)
+                .map(user -> new UserResponseDTO(user.getId(), user.getEmail(), user.getName(), user.getPhone()));
+    }
+
 
 }

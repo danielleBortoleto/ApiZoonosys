@@ -1,6 +1,5 @@
 package com.zoonosys.security.authentication;
 
-import com.zoonosys.models.User;
 import com.zoonosys.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.zoonosys.security.userdetails.UserDetailsImpl;
+import com.zoonosys.models.User;
 
 import java.io.IOException;
 
@@ -34,7 +34,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
             User user = userRepository.findByEmail(subject).get();
             UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
