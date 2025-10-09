@@ -37,10 +37,18 @@ public class SecurityConfig {
             "/news/register"
     };
 
+    public static final String [] ENDPOINTS_ADMIN_PUT = {
+            "/news/{id}"
+    };
+
     public static final String [] ENDPOINTS_ADMIN_GET = {
             "/users/test/administrator",
             "/users/{id}",
             "/users"
+    };
+
+    public static final String [] ENDPOINTS_ADMIN_DELETE = {
+            "/news/{id}"
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
@@ -56,10 +64,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/news").permitAll()
-                        //.requestMatchers(HttpMethod.GET, "/news/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/news/{id}").permitAll()
                         .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_ADMIN_GET).hasAuthority("ROLE_ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, ENDPOINTS_ADMIN_POST).hasAuthority("ROLE_ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.PUT, ENDPOINTS_ADMIN_PUT).hasAuthority("ROLE_ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.DELETE, ENDPOINTS_ADMIN_DELETE).hasAuthority("ROLE_ADMINISTRATOR")
                         .requestMatchers(ENDPOINTS_CUSTOMER).hasAuthority("ROLE_CUSTOMER")
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
                     .anyRequest().authenticated()

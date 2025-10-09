@@ -1,6 +1,7 @@
 package com.zoonosys.services;
 
 import com.zoonosys.dtos.RegisterNewsDTO;
+import com.zoonosys.dtos.UpdateNewsDTO;
 import com.zoonosys.models.News;
 import com.zoonosys.models.User;
 import com.zoonosys.repositories.NewsRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.zoonosys.exceptions.ResourceNotFoundException;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -105,5 +107,46 @@ public class NewsService {
      */
     public List<News> findByTitleContainingIgnoreCase(String title) {
         return newsRepository.findByTitleContainingIgnoreCase(title);
+    }
+
+    /**
+     * Atualiza uma notícia existente no sistema.
+     *
+     * @param id O ID da notícia a ser atualizada.
+     * @param updateNewsDTO o DTO contendo os novos dados na notícia.
+     * @return A entidade News atualizada.
+     * @throws ResourceNotFoundException se a notícia com o ID não for encontrada.
+     */
+    public News update (Long id, UpdateNewsDTO updateNewsDTO){
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Notícia não encontrada com ID: " + id));
+
+        news.setTitle(updateNewsDTO.title());
+        news.setContent(updateNewsDTO.content());
+
+        updateNewsDTO.imageUrl().ifPresent(news::setImageUrl);
+
+        String sanitizedTitle = SANITIZER_POLICY.sanitize(news.getTitle());
+        String sanitizedContent = SANITIZER_POLICY.sanitize(news.getContent());
+
+        news.setTitle(sanitizedTitle);
+        news.setContent(sanitizedContent);
+
+        news.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        return newsRepository.save(news);
+    }
+
+    /**
+     * Exclui uma notícia específica pelo seu ID.
+     *
+     * @param id O ID da notícia a ser excluída.
+     * @throws ResourceNotFoundException se a notícia com o ID não for encontrada.
+     */
+    public void delete(Long id){
+        if (!newsRepository.existsById(id)){
+            throw new ResourceNotFoundException("Notícia não encontrada com o ID: " + id);
+        }
+        newsRepository.deleteById(id);
     }
 }
