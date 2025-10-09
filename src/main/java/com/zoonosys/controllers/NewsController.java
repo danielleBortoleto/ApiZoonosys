@@ -1,6 +1,8 @@
 package com.zoonosys.controllers;
 
 import com.zoonosys.dtos.RegisterNewsDTO;
+import com.zoonosys.dtos.UpdateNewsDTO;
+import com.zoonosys.exceptions.ResourceNotFoundException;
 import com.zoonosys.models.News;
 import com.zoonosys.models.User;
 import com.zoonosys.services.NewsService;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,8 @@ import com.zoonosys.models.User;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/news")
@@ -109,5 +114,53 @@ public class NewsController {
 
         List<News> newsList = newsService.findByTitleContainingIgnoreCase(title);
         return new ResponseEntity<>(newsList, HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Atualizar uma notícia existente",
+            description = "Atualiza os dados de uma notícia pelo ID. Requer token JWT e a autoridade 'ROLE_ADMINISTRATOR'.",
+            tags = {"Notícias", "Administração"},
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Notícia atualizada com sucesso.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = News.class))),
+                    @ApiResponse(responseCode = "404", description = "Notícia não encontrada."),
+                    @ApiResponse(responseCode = "401", description = "Não autorizado."),
+                    @ApiResponse(responseCode = "403", description = "Proibido (Usuário sem 'ROLE_ADMINISTRATOR')."),
+                    @ApiResponse(responseCode = "400", description = "Requisição inválida.")
+            }
+    )
+    @PutMapping("/{id}")
+    public ResponseEntity<News> updateNews(
+            @PathVariable long id,
+            @RequestBody @Valid UpdateNewsDTO updateNewsDTO) {
+        try{
+            News updatedNews = newsService.update(id, updateNewsDTO);
+            return new ResponseEntity<>(updatedNews, HttpStatus.OK);
+        } catch (ResourceNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Operation(
+            summary = "Deletar uma notícia",
+            description = "Exclui uma notícia pelo ID. Requer token JWT e a autoridade 'ROLE_ADMINISTRATOR'.",
+            tags = {"Notícias", "Administração"},
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Notícia excluída com sucesso (No Content)."),
+                    @ApiResponse(responseCode = "404", description = "Notícia não encontrada."),
+                    @ApiResponse(responseCode = "401", description = "Não autorizado."),
+                    @ApiResponse(responseCode = "403", description = "Proibido (Usuário sem 'ROLE_ADMINISTRATOR').")
+            }
+    )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<News> deleteNews(@PathVariable Long id){
+        try{
+            newsService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ResourceNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
