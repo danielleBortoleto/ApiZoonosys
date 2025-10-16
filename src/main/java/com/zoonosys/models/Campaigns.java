@@ -3,21 +3,26 @@ package com.zoonosys.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Getter
 @Setter
-@Entity (name = "Campaign")
-public class Campaign {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity (name = "Campaigns")
+@Table(name = "Campaigns")
+@Schema(description = "Entidade de Campanha persistida no banco de dados.")
+public class Campaigns {
 
     @Schema(description = "ID único da Campanha.", example = "10")
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(description = "Nome da campanha após sanitização.", example = "Campanha de Vacinação para Raiva")
     @Column(nullable = false)
     private String name;
 
