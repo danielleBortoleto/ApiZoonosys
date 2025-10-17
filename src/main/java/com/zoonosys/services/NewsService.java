@@ -5,8 +5,7 @@ import com.zoonosys.dtos.UpdateNewsDTO;
 import com.zoonosys.models.News;
 import com.zoonosys.models.User;
 import com.zoonosys.repositories.NewsRepository;
-import org.owasp.html.HtmlPolicyBuilder;
-import org.owasp.html.PolicyFactory;
+import com.zoonosys.security.SecuritySanitizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,38 +24,19 @@ import java.util.Optional;
 public class NewsService {
     private final NewsRepository newsRepository;
 
-    /**
-     * Política de sanitização de HTML (OWASP) para prevenir ataques XSS (Cross-Site Scripting).
-     * Permite tags seguras para formatação de conteúdo (h1-h6, p, ul, li, strong, i)
-     * e atributos específicos (href, src, class).
-     */
-    private static final PolicyFactory SANITIZER_POLICY = new HtmlPolicyBuilder()
-            .allowElements("p", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "blockquote", "pre", "br", "div")
-            .allowElements("b", "i", "strong", "em", "a", "span", "code", "img")
-            .allowAttributes("href").onElements("a")
-            .allowAttributes("src", "alt", "title", "width", "height").onElements("img")
-            .allowAttributes("class").onElements("p", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "div", "span") // Exemplo: permite classes para estilização
-            .toFactory();
+    private final SecuritySanitizer sanitizer;
 
     /**
      * Construtor para injeção de dependência do repositório.
      * @param newsRepository O repositório de dados para acesso à tabela de notícias.
      */
     @Autowired
-    public NewsService(NewsRepository newsRepository) {
+    public NewsService(NewsRepository newsRepository, SecuritySanitizer sanitizer) {
         this.newsRepository = newsRepository;
+
+        this.sanitizer = sanitizer;
     }
 
-    /**
-     * Registra uma nova notícia no sistema.
-     * <p>
-     * Antes de salvar, a notícia é sanitizada usando a {@link #SANITIZER_POLICY} para
-     * remover código malicioso e garantir a integridade do conteúdo.
-     *
-     * @param registerNewsDTO O DTO contendo os dados da notícia a ser criada.
-     * @param authenticatedUser O objeto {@link User} autenticado, definido como autor da notícia.
-     * @return A entidade {@link News} salva no banco de dados.
-     */
     public News register(RegisterNewsDTO registerNewsDTO, User authenticatedUser) {
         News news = News.builder()
                 .title(registerNewsDTO.title())
@@ -68,8 +48,8 @@ public class NewsService {
         news.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         // Aplicando a sanitização de segurança (XSS prevention)
-        String sanitizedTitle = SANITIZER_POLICY.sanitize(news.getTitle());
-        String sanitizedContent = SANITIZER_POLICY.sanitize(news.getContent());
+        String sanitizedTitle = sanitizer.sanitize(news.getTitle());
+        String sanitizedContent = sanitizer.sanitize(news.getContent());
 
         news.setTitle(sanitizedTitle);
         news.setContent(sanitizedContent);
@@ -81,7 +61,7 @@ public class NewsService {
      * Busca todas as notícias de forma paginada.
      *
      * @param pageable Objeto {@link Pageable} contendo os parâmetros de paginação (página, tamanho, ordenação).
-     * @return Um objeto {@link Page<News>} com as notícias e metadados de paginação.
+     * @return Um objeto {@link Page< News >} com as notícias e metadados de paginação.
      */
     public Page<News> findAll(Pageable pageable) {
 
@@ -92,7 +72,7 @@ public class NewsService {
      * Busca uma notícia específica pelo seu ID.
      *
      * @param id O ID da notícia a ser buscada.
-     * @return Um {@link Optional<News>} contendo a notícia se ela existir, ou vazio caso contrário.
+     * @return Um {@link Optional< News >} contendo a notícia se ela existir, ou vazio caso contrário.
      */
     public Optional<News> findById(Long id) {
 
@@ -126,8 +106,8 @@ public class NewsService {
 
         updateNewsDTO.imageUrl().ifPresent(news::setImageUrl);
 
-        String sanitizedTitle = SANITIZER_POLICY.sanitize(news.getTitle());
-        String sanitizedContent = SANITIZER_POLICY.sanitize(news.getContent());
+        String sanitizedTitle = sanitizer.sanitize(news.getTitle());
+        String sanitizedContent = sanitizer.sanitize(news.getContent());
 
         news.setTitle(sanitizedTitle);
         news.setContent(sanitizedContent);

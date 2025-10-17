@@ -26,7 +26,8 @@ public class SecurityConfig {
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/users/login",
             "/users/register",
-            "/news/{id}"
+            "/news/{id}",
+            "/campaigns/{id}"
     };  
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
@@ -34,11 +35,13 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_ADMIN_POST = {
-            "/news/register"
+            "/news/register",
+            "/campaigns/register"
     };
 
     public static final String [] ENDPOINTS_ADMIN_PUT = {
-            "/news/{id}"
+            "/news/{id}",
+            "/campaigns/{id}"
     };
 
     public static final String [] ENDPOINTS_ADMIN_GET = {
@@ -48,7 +51,8 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_ADMIN_DELETE = {
-            "/news/{id}"
+            "/news/{id}",
+            "/campaigns/{id}"
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
@@ -64,7 +68,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/news").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/campaigns").permitAll()
                         .requestMatchers(HttpMethod.GET, "/news/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/campaigns/{id}").permitAll()
                         .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_ADMIN_GET).hasAuthority("ROLE_ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, ENDPOINTS_ADMIN_POST).hasAuthority("ROLE_ADMINISTRATOR")
