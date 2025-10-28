@@ -27,6 +27,8 @@ public class SecurityConfig {
             "/users/login",
             "/users/register",
             "/news/{id}",
+            "/animals/adocao",
+            "/animals/{id}",
             "/campaigns/{id}"
     };  
 
@@ -36,23 +38,28 @@ public class SecurityConfig {
 
     public static final String [] ENDPOINTS_ADMIN_POST = {
             "/news/register",
-            "/campaigns/register"
+            "/campaigns/register",
+            "/animals/register"
     };
 
     public static final String [] ENDPOINTS_ADMIN_PUT = {
             "/news/{id}",
-            "/campaigns/{id}"
+            "/campaigns/{id}",
+            "animals/{id}"
     };
 
     public static final String [] ENDPOINTS_ADMIN_GET = {
             "/users/test/administrator",
             "/users/{id}",
-            "/users"
+            "/users",
+            "/animals",
+            "/animals/search"
     };
 
     public static final String [] ENDPOINTS_ADMIN_DELETE = {
             "/news/{id}",
-            "/campaigns/{id}"
+            "/campaigns/{id}",
+            "/animals/{id}"
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
@@ -67,6 +74,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/animals/adocao").permitAll()
+                        .requestMatchers(HttpMethod.GET, "animals/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/news").permitAll()
                         .requestMatchers(HttpMethod.GET, "/campaigns").permitAll()
                         .requestMatchers(HttpMethod.GET, "/news/{id}").permitAll()
