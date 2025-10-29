@@ -15,7 +15,7 @@ spring:
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:senha}
     driver-class-name: org.postgresql.Driver
-  jpa:
+  jpa:  
     hibernate:
       ddl-auto: update
     properties:
@@ -38,6 +38,6 @@ api:
 springdoc:
     api-docs:
       path: /docs
-      pathToMatch: /api/**
+      pathToMatch: /api/**  
     swagger-ui:
       use-root-path: true
