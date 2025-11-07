@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class OpenAiConfig {
+public class OpenApiConfig {
 
     @Bean
-    public OpenAPI customOpenAi(){
+    public OpenAPI customOpenApi(){
         return new OpenAPI()
                 .info(new Info()
                     .title("ZoonoSys Documentation")
