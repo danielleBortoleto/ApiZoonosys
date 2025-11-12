@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-  name: demo
+    name: demo
 
 # =======================================
 # CONFIGURAÇÕES DO BANCO DE DADOS (POSTGRESQL)
@@ -15,6 +15,7 @@ spring:
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:senha}
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -36,8 +37,37 @@ api:
 # CONFIGURAÇÕES SPRINGDOC (OpenAPI/Swagger)
 # =======================================
 springdoc:
-    api-docs:
-      path: /docs
-      pathToMatch: /api/**
-    swagger-ui:
-      use-root-path: true
+  api-docs:
+    path: /docs
+    pathToMatch: /api/**
+  swagger-ui:
+    use-root-path: true
+
+# =======================================
+# CONFIGURAÇÕES BÁSICAS DE E-MAIL (JavaMailSender)
+# =======================================
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+             enable: true
+          debug: true
+
+# =======================================
+# ENDEREÇO DE E-MAIL QUE APARECERÁ COMO REMETENTE
+# =======================================
+  mail-from:
+    address: noreply@zoonosys.com
+
+# =======================================
+# CONFIGURAÇÃO DO FRONT-END
+# =======================================
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
