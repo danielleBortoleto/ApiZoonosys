@@ -6,6 +6,7 @@ import com.zoonosys.exceptions.UserNotFoundException;
 import com.zoonosys.models.PasswordResetToken;
 import com.zoonosys.models.User;
 import com.zoonosys.services.PasswordResetService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +59,12 @@ public class PasswordResetController {
 
     /**
      * Endpoint para confirmar a redefinição de senha.
-     * @param confirmation DTO com o token, nova senha e confirmação.
+     * @param tokenValue O token de reset de senha (vindo da URL).
+     * @param confirmation DTO com a nova senha e confirmação (vindo do corpo).
      * @return 200 OK se a senha for redefinida, 400 Bad Request caso contrário.
      */
-
+    @Operation(summary = "Confirma a redefinição de senha",
+            description = "Valida o token da URL, verifica a nova senha e a aplica ao usuário, invalidando todos os tokens ativos.")
     @PostMapping("/reset-password/confirm")
     public ResponseEntity<String> confirmPasswordReset(
             @RequestParam("token") String tokenValue,

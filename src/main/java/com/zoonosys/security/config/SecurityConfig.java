@@ -38,7 +38,13 @@ public class SecurityConfig {
             "/auth/reset-password/request",
             "/auth/reset-password/validate",
             "/auth/reset-password/confirm"
-    };  
+    };
+
+    public static final String [] SWAGGER_ENDPOINTS = {
+            "/swagger-ui/**",
+            "/docs/**",
+            "/v3/api-docs/**"
+    };
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/users/test"
@@ -89,6 +95,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/news/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/campaigns/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/reset-password/request").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/reset-password/confirm").permitAll()
                         .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_ADMIN_GET).hasAuthority("ROLE_ADMINISTRATOR")
