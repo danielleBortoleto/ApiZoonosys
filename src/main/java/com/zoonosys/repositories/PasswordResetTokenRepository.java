@@ -2,6 +2,7 @@ package com.zoonosys.repositories;
 
 import com.zoonosys.models.PasswordResetToken;
 import com.zoonosys.models.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,7 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
     Optional<PasswordResetToken> findByToken(String token);
 
     @Modifying
+    @Transactional
     @Query("DELETE FROM PasswordResetToken t WHERE t.expiryDate <= :currentTime OR t.used = true")
     int deleteExpiredAndUsedTokens(@Param("currentTime") LocalDateTime currentTime);
 
