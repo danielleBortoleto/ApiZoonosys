@@ -25,6 +25,9 @@ public class EmailService {
     @Value("${mail-from.address:noreply@zoonosys.com}")
     private String fromAddress;
 
+    @Value("${app.frontend-url}")
+    private String frontendBaseUrl;
+
     public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }

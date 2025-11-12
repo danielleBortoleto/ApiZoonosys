@@ -124,12 +124,10 @@ public class PasswordResetService {
         }
 
         String hashedPassword = passwordEncoder.encode(newPassword);
-
         user.setPassword(hashedPassword);
         userRepository.save(user);
 
-        token.setUsed(true);
-        tokenRepository.save(token);
+        tokenRepository.deleteAllByUserAndUsedIsFalse(user);
 
         logger.info("Senha redefinida com sucesso e token invalidado para o usuário: {}", user.getEmail());
 

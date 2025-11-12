@@ -65,3 +65,9 @@ springdoc:
 # =======================================
   mail-from:
     address: noreply@zoonosys.com
+
+# =======================================
+# CONFIGURAÇÃO DO FRONT-END
+# =======================================
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
