@@ -15,6 +15,8 @@ public class DemoApplication {
         System.setProperty("SERVER_PORT", dotenv.get("SERVER_PORT"));
         System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
         System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+        System.setProperty("spring.mail.username", dotenv.get("MAIL_USERNAME"));
+        System.setProperty("spring.mail.password", dotenv.get("MAIL_PASSWORD"));
 
         SpringApplication.run(DemoApplication.class, args);
 	}

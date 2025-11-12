@@ -16,7 +16,7 @@ public class OpenApiConfig {
                     .title("ZoonoSys Documentation")
                     .version("1.0")
                     .description("Documentation Api ZoonoSys")
-    //              .termsOfService("www.daniellefbortoleto.com.br")
+                        .termsOfService("www.daniellefbortoleto.com.br")
                     .license(
                             new License()
                                     .name("Apache License 2.0")

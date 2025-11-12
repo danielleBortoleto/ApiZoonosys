@@ -1,9 +1,12 @@
 package com.zoonosys.security.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.zoonosys.security.authentication.UserAuthenticationFilter;
+
+import java.util.Properties;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +34,10 @@ public class SecurityConfig {
             "/news/{id}",
             "/animals/adocao",
             "/animals/{id}",
-            "/campaigns/{id}"
+            "/campaigns/{id}",
+            "/auth/reset-password/request",
+            "/auth/reset-password/validate",
+            "/auth/reset-password/confirm"
     };  
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
@@ -75,11 +83,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/animals/adocao").permitAll()
-                        .requestMatchers(HttpMethod.GET, "animals/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/animals/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/news").permitAll()
                         .requestMatchers(HttpMethod.GET, "/campaigns").permitAll()
                         .requestMatchers(HttpMethod.GET, "/news/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/campaigns/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/reset-password/request").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/reset-password/confirm").permitAll()
                         .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                         .requestMatchers(HttpMethod.GET, ENDPOINTS_ADMIN_GET).hasAuthority("ROLE_ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, ENDPOINTS_ADMIN_POST).hasAuthority("ROLE_ADMINISTRATOR")
@@ -124,5 +134,22 @@ public class SecurityConfig {
         return source;
     }
 
-    
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        Dotenv dotenv = Dotenv.load();
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+        mailSender.setUsername(dotenv.get("MAIL_USERNAME"));
+        mailSender.setPassword(dotenv.get("MAIL_PASSWORD"));
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.debug", "true");
+
+        return mailSender;
+    }
 }
